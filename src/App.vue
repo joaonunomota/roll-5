@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <v-dice :value="1" />
+    <button @click="roll">Roll</button>
+    <v-dice :value="dice" />
   </div>
 </template>
 <script>
@@ -9,6 +10,14 @@ export default {
   name: "App",
   components: {
     VDice
+  },
+  data: () => ({
+    dice: 1
+  }),
+  methods: {
+    roll: function() {
+      this.dice = Math.floor(Math.random() * 6) + 1;
+    }
   }
 };
 </script>
