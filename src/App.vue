@@ -1,9 +1,15 @@
 <template>
-  <div id="app"></div>
+  <div id="app">
+    <v-dice :value="1" />
+  </div>
 </template>
 <script>
+import { VDice } from "./components";
 export default {
-  name: "App"
+  name: "App",
+  components: {
+    VDice
+  }
 };
 </script>
 <style lang="scss"></style>
