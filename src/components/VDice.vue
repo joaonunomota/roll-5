@@ -45,32 +45,33 @@ export default {
 </script>
 <style lang="scss">
 .dice {
-  height: 320px;
-  width: 320px;
+  height: 32px;
+  width: 32px;
   background-image: url("../assets/dice.png");
+  background-size: 192px 64px;
 
   &.one {
-    background-position: 0 0;
+    background-position: 0 -32px;
   }
 
   &.two {
-    background-position: -320px 0;
+    background-position: -32px -32px;
   }
 
   &.three {
-    background-position: -640px 0;
+    background-position: -64px -32px;
   }
 
   &.four {
-    background-position: -960px 0;
+    background-position: -96px -32px;
   }
 
   &.five {
-    background-position: -1280px 0;
+    background-position: -128px -32px;
   }
 
   &.six {
-    background-position: -1600px 0;
+    background-position: -160px -32px;
   }
 }
 </style>

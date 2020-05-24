@@ -20,9 +20,10 @@ export default {
 </script>
 <style lang="scss">
 .lock {
-  height: 640px;
-  width: 640px;
+  height: 32px;
+  width: 32px;
   background-image: url("../assets/lock.png");
+  background-size: 32px 64px;
   cursor: pointer;
 
   &.closed {
@@ -30,7 +31,7 @@ export default {
   }
 
   &.open {
-    background-position: 0 -640px;
+    background-position: 0 -32px;
   }
 }
 </style>
