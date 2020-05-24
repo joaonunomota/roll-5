@@ -6,17 +6,20 @@
 </template>
 <script>
 import { VDice } from "./components";
+
 export default {
   name: "App",
   components: {
     VDice
   },
   data: () => ({
-    dice: 1
+    dice: { pips: 1, locked: false }
   }),
   methods: {
     roll: function() {
-      this.dice = Math.floor(Math.random() * 6) + 1;
+      if (!this.dice.locked) {
+        this.dice.pips = Math.floor(Math.random() * 6) + 1;
+      }
     }
   }
 };

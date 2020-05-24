@@ -1,20 +1,31 @@
 <template>
-  <div :class="['dice', pips]"></div>
+  <div>
+    <v-lock v-model="value.locked" />
+    <div :class="['dice', pips]"></div>
+  </div>
 </template>
 <script>
+import VLock from "./VLock.vue";
+
 export default {
   name: "VDice",
+  components: {
+    VLock
+  },
   props: {
     value: {
-      type: Number,
+      type: Object,
       required: true,
       validator: value =>
-        value !== undefined && [1, 2, 3, 4, 5, 6].indexOf(value) !== -1
+        value !== undefined &&
+        value.pips !== undefined &&
+        [1, 2, 3, 4, 5, 6].indexOf(value.pips) !== -1 &&
+        value.locked !== undefined
     }
   },
   computed: {
     pips: function() {
-      switch (this.value) {
+      switch (this.value.pips) {
         case 6:
           return "six";
         case 5:
