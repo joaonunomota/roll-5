@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-lock v-model="value.locked" />
+    <v-lock v-model="value.locked" :disabled="disabled" />
     <div :class="['dice', pips]"></div>
   </div>
 </template>
@@ -21,6 +21,11 @@ export default {
         value.pips !== undefined &&
         [1, 2, 3, 4, 5, 6].indexOf(value.pips) !== -1 &&
         value.locked !== undefined
+    },
+    disabled: {
+      type: Boolean,
+      required: true,
+      validator: value => value !== undefined
     }
   },
   computed: {
