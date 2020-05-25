@@ -56,7 +56,7 @@ export default {
 .dice {
   height: 32px;
   width: 32px;
-  background-image: url("../assets/dice.png");
+  background-image: url("../assets/images/dice.png");
   background-size: 192px 64px;
 
   &.one {

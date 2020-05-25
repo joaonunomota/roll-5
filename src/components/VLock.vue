@@ -27,7 +27,7 @@ export default {
 .lock {
   height: 32px;
   width: 32px;
-  background-image: url("../assets/lock.png");
+  background-image: url("../assets/images/lock.png");
   background-size: 32px 64px;
 
   &.closed {
