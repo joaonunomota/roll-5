@@ -1,5 +1,10 @@
 <template>
-  <button :class="['lock', value ? 'closed' : 'open']" :disabled="disabled" @click="toggle"></button>
+  <button
+    v-show="!disabled"
+    :class="['lock', value ? 'closed' : 'open']"
+    :disabled="disabled"
+    @click="toggle"
+  ></button>
 </template>
 <script>
 export default {
