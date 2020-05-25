@@ -12,6 +12,7 @@
         :disabled="!canLock"
         :key="index"
       />
+      <v-scorecard />
     </div>
     <div v-show="isGameOver">
       <button @click="resetGame">Play Again</button>
@@ -20,12 +21,13 @@
   </div>
 </template>
 <script>
-import { VDice } from "./components";
+import { VDice, VScorecard } from "./components";
 
 export default {
   name: "App",
   components: {
-    VDice
+    VDice,
+    VScorecard
   },
   data: () => ({
     dice: [
