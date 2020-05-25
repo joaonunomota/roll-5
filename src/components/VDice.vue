@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dice-container">
     <v-lock v-model="value.locked" :disabled="disabled" />
     <div :class="['dice', pips]"></div>
   </div>
@@ -49,6 +49,10 @@ export default {
 };
 </script>
 <style lang="scss">
+.dice-container {
+  display: inline-block;
+}
+
 .dice {
   height: 32px;
   width: 32px;
