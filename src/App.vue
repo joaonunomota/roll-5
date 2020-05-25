@@ -103,30 +103,6 @@ body {
   background-color: #008148;
   background-image: url("./assets/images/background.svg");
 }
-.button {
-  height: 64px;
-  width: 128px;
-  color: white;
-  background-image: url("./assets/images/button.png");
-  background-size: 200% 300%;
-
-  &:focus {
-    background-position: 0 -100%;
-
-    &:active {
-      background-position: -100% -100%;
-    }
-  }
-
-  &:active {
-    background-position: -100% 0;
-  }
-
-  &:disabled {
-    background-position: 0 -200%;
-    color: white;
-  }
-}
 
 button {
   display: inline-block;
@@ -144,6 +120,31 @@ button {
 
   &:disabled {
     cursor: default;
+  }
+
+  &.button {
+    height: 64px;
+    width: 128px;
+    color: white;
+    background-image: url("./assets/images/button.png");
+    background-size: 200% 300%;
+
+    &:focus {
+      background-position: 0 -100%;
+
+      &:active {
+        background-position: -100% -100%;
+      }
+    }
+
+    &:active {
+      background-position: -100% 0;
+    }
+
+    &:disabled {
+      background-position: 0 -200%;
+      color: white;
+    }
   }
 }
 </style>
