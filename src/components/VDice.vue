@@ -54,33 +54,33 @@ export default {
 }
 
 .dice {
-  height: 32px;
-  width: 32px;
+  height: 64px;
+  width: 64px;
   background-image: url("../assets/images/dice.png");
-  background-size: 192px 64px;
+  background-size: 600% 200%;
 
   &.one {
-    background-position: 0 -32px;
+    background-position: 0 -100%;
   }
 
   &.two {
-    background-position: -32px -32px;
+    background-position: -100% -100%;
   }
 
   &.three {
-    background-position: -64px -32px;
+    background-position: -200% -100%;
   }
 
   &.four {
-    background-position: -96px -32px;
+    background-position: -300% -100%;
   }
 
   &.five {
-    background-position: -128px -32px;
+    background-position: -400% -100%;
   }
 
   &.six {
-    background-position: -160px -32px;
+    background-position: -500% -100%;
   }
 }
 </style>

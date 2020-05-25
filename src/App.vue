@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div v-show="!isGameOver">
-      <button :disabled="!canRoll" @click="roll">Roll</button>
-      <button :disabled="!canScore" @click="score">Score</button>
+      <button class="button" :disabled="!canRoll" @click="roll">Roll</button>
+      <button class="button" :disabled="!canScore" @click="score">Score</button>
       <p>Round: {{ round }} / 13</p>
       <p>Rolls Left: {{ rolls }}</p>
       <p>Score: {{ scorecard }}</p>
@@ -15,7 +15,7 @@
       <v-scorecard />
     </div>
     <div v-show="isGameOver">
-      <button @click="resetGame">Play Again</button>
+      <button class="button" @click="resetGame">Play Again</button>
       <p>Score: {{ scorecard }}</p>
     </div>
   </div>
@@ -102,6 +102,30 @@ export default {
 body {
   background-color: #008148;
   background-image: url("./assets/images/background.svg");
+}
+.button {
+  height: 64px;
+  width: 128px;
+  color: white;
+  background-image: url("./assets/images/button.png");
+  background-size: 200% 300%;
+
+  &:focus {
+    background-position: 0 -100%;
+
+    &:active {
+      background-position: -100% -100%;
+    }
+  }
+
+  &:active {
+    background-position: -100% 0;
+  }
+
+  &:disabled {
+    background-position: 0 -200%;
+    color: white;
+  }
 }
 
 button {

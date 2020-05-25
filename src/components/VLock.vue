@@ -25,17 +25,25 @@ export default {
 </script>
 <style lang="scss">
 .lock {
-  height: 32px;
-  width: 32px;
+  height: 64px;
+  width: 64px;
   background-image: url("../assets/images/lock.png");
-  background-size: 32px 64px;
+  background-size: 200% 200%;
 
   &.closed {
     background-position: 0 0;
+
+    &:focus {
+      background-position: -100% 0;
+    }
   }
 
   &.open {
-    background-position: 0 -32px;
+    background-position: 0 -100%;
+
+    &:focus {
+      background-position: -100% -100%;
+    }
   }
 }
 </style>
