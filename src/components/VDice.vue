@@ -6,6 +6,7 @@
 </template>
 <script>
 import VLock from "./VLock.vue";
+import { isDice } from "../utils";
 
 export default {
   name: "VDice",
@@ -16,11 +17,7 @@ export default {
     value: {
       type: Object,
       required: true,
-      validator: value =>
-        value !== undefined &&
-        value.pips !== undefined &&
-        [1, 2, 3, 4, 5, 6].indexOf(value.pips) !== -1 &&
-        value.locked !== undefined
+      validator: value => isDice(value)
     },
     disabled: {
       type: Boolean,

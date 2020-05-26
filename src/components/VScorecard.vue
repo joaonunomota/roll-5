@@ -98,28 +98,21 @@
   </table>
 </template>
 <script>
+import { isArray, isDice, isScorecard } from "../utils";
+
 export default {
   name: "VScorecard",
   props: {
     value: {
       type: Object,
       required: true,
-      validator: value => value !== undefined && value.chance !== undefined
+      validator: value => isScorecard(value)
     },
     dice: {
       type: Array,
       required: false,
       default: () => [],
-      validator: value =>
-        value !== undefined &&
-        (value === null ||
-          (Array.isArray(value) &&
-            value.every(
-              v =>
-                v.pips !== undefined &&
-                [1, 2, 3, 4, 5, 6].indexOf(v.pips) !== -1 &&
-                v.locked !== undefined
-            )))
+      validator: value => isArray(value, isDice)
     },
     readonly: {
       type: Boolean,
