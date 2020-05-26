@@ -38,6 +38,8 @@ export default {
     rolls: 3,
     round: 1,
     scorecard: {
+      name: "AAA",
+      ones: null,
       chance: null
     }
   }),

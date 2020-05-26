@@ -10,7 +10,7 @@ const sort = function (values) {
     validate(values);
 
     let result = values;
-    result.sort((a, b) => a - b);
+    result.sort((a, b) => a.pips - b.pips);
 
     return result;
 };
@@ -18,13 +18,15 @@ const sort = function (values) {
 const count = function (values, value) {
     validate(values);
 
-    return values.filter(v => v === value).length;
+    return values.filter(v => v.pips === value).length;
 };
 
 const distinct = function (values) {
     validate(values);
 
-    return [...new Set(values)].length;
+    const pips = values.map(v => v.pips);
+
+    return [...new Set(pips)].length;
 };
 
 const hasFullHouse = function (values) {
@@ -37,21 +39,23 @@ const hasFullHouse = function (values) {
 const hasSequence = function (values, length) {
     validate(values);
 
-    return sort(values).some((value, index) => value === values[index + (length - 1)]);
+    return sort(values).some((value, index) => value === values[index + (length - 1)].pips);
 };
 
 const sum = function (values) {
     validate(values);
 
-    return values.reduce((sum, current) => sum + current);
+    const pips = values.map(v => v.pips);
+
+    return pips.reduce((sum, current) => sum + current, 0);
 };
 
 const sumIf = function (values, value) {
     validate(values);
 
-    values.reduce((sum, current) =>
-        current === value ? sum : sum + current
-    );
+    const pips = values.map(v => v.pips);
+
+    return pips.filter(p => p === value).reduce((sum, current) => sum + current, 0);
 };
 
 export { sort, count, distinct, hasFullHouse, hasSequence, sum, sumIf };

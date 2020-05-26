@@ -12,7 +12,7 @@ const isDice = function (value) {
 };
 
 const isScorecard = function (value) {
-    return value !== undefined && value.chance !== undefined;
+    return value !== undefined && value.chance !== undefined && value.ones !== undefined;
 };
 
 export { isArray, isDice, isScorecard };

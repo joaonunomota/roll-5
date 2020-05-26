@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th scope="col"></th>
-        <th scope="col"></th>
+        <th scope="col">{{ value.name }}</th>
       </tr>
     </thead>
     <tbody>
@@ -12,7 +12,13 @@
       </tr>
       <tr>
         <th scope="row">Aces</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('ones', ones)"
+            :disabled="readonly || value.ones !== null"
+          >{{ value.ones === null && !readonly ? ones : value.ones }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Twos</th>
@@ -74,7 +80,7 @@
         <td>
           <button
             class="is-discreet"
-            @click="assignChance"
+            @click="assign('chance', chance)"
             :disabled="readonly || value.chance !== null"
           >{{ value.chance === null && !readonly ? chance : value.chance }}</button>
         </td>
@@ -84,7 +90,7 @@
       </tr>
       <tr>
         <th scope="row">Total (Upper Section)</th>
-        <td></td>
+        <td>{{ upper }}</td>
       </tr>
       <tr>
         <th scope="row">Total (Lower Section)</th>
@@ -98,7 +104,7 @@
   </table>
 </template>
 <script>
-import { isArray, isDice, isScorecard } from "../utils";
+import { isArray, isDice, isScorecard, sumIf } from "../utils";
 
 export default {
   name: "VScorecard",
@@ -122,25 +128,31 @@ export default {
     }
   },
   computed: {
+    ones: function() {
+      return sumIf(this.dice, 1);
+    },
     chance: function() {
       return this.dice.reduce((total, current) => {
         return total + current.pips;
       }, 0);
     },
+    upper: function() {
+      return this.nullToZero(this.value.ones);
+    },
     lower: function() {
-      return this.value.chance;
+      return this.nullToZero(this.value.chance);
     },
     grandTotal: function() {
-      return this.lower;
+      return this.upper + this.lower;
     }
   },
   methods: {
-    assignChance: function() {
-      this.value.chance = this.chance;
-      this.score();
-    },
-    score: function() {
+    assign: function(property, value) {
+      this.value[property] = value;
       this.$emit("score");
+    },
+    nullToZero: function(value) {
+      return value === null ? 0 : value;
     }
   }
 };
