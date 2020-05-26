@@ -40,6 +40,11 @@ export default {
     scorecard: {
       name: null,
       ones: null,
+      twos: null,
+      threes: null,
+      fours: null,
+      fives: null,
+      sixes: null,
       chance: null
     }
   }),

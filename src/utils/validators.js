@@ -15,6 +15,11 @@ const isScorecard = function (value) {
     return value !== undefined &&
         value.chance !== undefined &&
         value.ones !== undefined &&
+        value.twos !== undefined &&
+        value.threes !== undefined &&
+        value.fours !== undefined &&
+        value.fives !== undefined &&
+        value.sixes !== undefined &&
         value.name !== undefined &&
         value.name !== "";
 };

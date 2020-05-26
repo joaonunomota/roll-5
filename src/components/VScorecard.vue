@@ -22,23 +22,53 @@
       </tr>
       <tr>
         <th scope="row">Twos</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('twos', twos)"
+            :disabled="readonly || value.twos !== null"
+          >{{ value.twos === null && !readonly ? twos : value.twos }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Threes</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('threes', threes)"
+            :disabled="readonly || value.threes !== null"
+          >{{ value.threes === null && !readonly ? threes : value.threes }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Fours</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('fours', fours)"
+            :disabled="readonly || value.fours !== null"
+          >{{ value.fours === null && !readonly ? fours : value.fours }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Fives</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('fives', fives)"
+            :disabled="readonly || value.fives !== null"
+          >{{ value.fives === null && !readonly ? fives : value.fives }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Sixes</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('sixes', sixes)"
+            :disabled="readonly || value.sixes !== null"
+          >{{ value.sixes === null && !readonly ? sixes : value.sixes }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Total</th>
@@ -131,13 +161,35 @@ export default {
     ones: function() {
       return sumIf(this.dice, 1);
     },
+    twos: function() {
+      return sumIf(this.dice, 2);
+    },
+    threes: function() {
+      return sumIf(this.dice, 3);
+    },
+    fours: function() {
+      return sumIf(this.dice, 4);
+    },
+    fives: function() {
+      return sumIf(this.dice, 5);
+    },
+    sixes: function() {
+      return sumIf(this.dice, 6);
+    },
     chance: function() {
       return this.dice.reduce((total, current) => {
         return total + current.pips;
       }, 0);
     },
     upper: function() {
-      return this.nullToZero(this.value.ones);
+      return (
+        this.nullToZero(this.value.ones) +
+        this.nullToZero(this.value.twos) +
+        this.nullToZero(this.value.threes) +
+        this.nullToZero(this.value.fours) +
+        this.nullToZero(this.value.fives) +
+        this.nullToZero(this.value.sixes)
+      );
     },
     bonus: function() {
       return this.upper > 63 ? 35 : 0;
@@ -146,7 +198,7 @@ export default {
       return this.nullToZero(this.value.chance);
     },
     grandTotal: function() {
-      return this.upper + this.lower;
+      return this.upper + this.bonus + this.lower;
     }
   },
   methods: {
