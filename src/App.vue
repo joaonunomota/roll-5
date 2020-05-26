@@ -1,22 +1,20 @@
 <template>
   <div id="app">
     <div v-show="!isGameOver">
-      <button class="button" :disabled="!canRoll" @click="roll">Roll</button>
-      <button class="button" :disabled="!canScore" @click="score">Score</button>
+      <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
       <p>Round: {{ round }} / 13</p>
       <p>Rolls Left: {{ rolls }}</p>
-      <p>Score: {{ scorecard }}</p>
       <v-dice
         v-for="index in [0, 1, 2, 3, 4]"
         v-model="dice[index]"
         :disabled="!canLock"
         :key="index"
       />
-      <v-scorecard />
+      <v-scorecard v-model="scorecard" :dice="dice" :readonly="!canLock" @score="nextRound" />
     </div>
     <div v-show="isGameOver">
-      <button class="button" @click="resetGame">Play Again</button>
-      <p>Score: {{ scorecard }}</p>
+      <button class="is-fancy" @click="resetGame">Play Again</button>
+      <v-scorecard v-model="scorecard" />
     </div>
   </div>
 </template>
@@ -39,7 +37,9 @@ export default {
     ],
     rolls: 3,
     round: 1,
-    scorecard: 0
+    scorecard: {
+      chance: null
+    }
   }),
   computed: {
     canLock: function() {
@@ -58,6 +58,10 @@ export default {
     }
   },
   methods: {
+    nextRound: function() {
+      this.resetRound();
+      ++this.round;
+    },
     resetGame: function() {
       this.resetRound();
       this.round = 1;
@@ -77,13 +81,6 @@ export default {
           this.dice[index].pips = Math.floor(Math.random() * 6) + 1;
         }
       }
-    },
-    score: function() {
-      this.resetRound();
-      ++this.round;
-      this.scorecard = this.dice.reduce((total, current) => {
-        return total + current.pips;
-      }, this.scorecard);
     }
   }
 };
@@ -122,7 +119,7 @@ button {
     cursor: default;
   }
 
-  &.button {
+  &.is-fancy {
     height: 64px;
     width: 128px;
     color: white;

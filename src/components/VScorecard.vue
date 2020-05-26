@@ -71,7 +71,13 @@
       </tr>
       <tr>
         <th scope="row">Chance</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assignChance"
+            :disabled="readonly || value.chance !== null"
+          >{{ value.chance === null && !readonly ? chance : value.chance }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="col" colspan="2">TOTALS</th>
@@ -82,21 +88,83 @@
       </tr>
       <tr>
         <th scope="row">Total (Lower Section)</th>
-        <td></td>
+        <td>{{ lower }}</td>
       </tr>
       <tr>
         <th scope="row">Grand Total</th>
-        <td></td>
+        <td>{{ grandTotal }}</td>
       </tr>
     </tbody>
   </table>
 </template>
 <script>
 export default {
-  name: "VScorecard"
+  name: "VScorecard",
+  props: {
+    value: {
+      type: Object,
+      required: true,
+      validator: value => value !== undefined && value.chance !== undefined
+    },
+    dice: {
+      type: Array,
+      required: false,
+      default: () => [],
+      validator: value =>
+        value !== undefined &&
+        (value === null ||
+          (Array.isArray(value) &&
+            value.every(
+              v =>
+                v.pips !== undefined &&
+                [1, 2, 3, 4, 5, 6].indexOf(v.pips) !== -1 &&
+                v.locked !== undefined
+            )))
+    },
+    readonly: {
+      type: Boolean,
+      required: false,
+      default: false,
+      validator: value => value !== undefined
+    }
+  },
+  computed: {
+    chance: function() {
+      return this.dice.reduce((total, current) => {
+        return total + current.pips;
+      }, 0);
+    },
+    lower: function() {
+      return this.value.chance;
+    },
+    grandTotal: function() {
+      return this.lower;
+    }
+  },
+  methods: {
+    assignChance: function() {
+      this.value.chance = this.chance;
+      this.score();
+    },
+    score: function() {
+      this.$emit("score");
+    }
+  }
 };
 </script>
 <style lang="scss">
+button {
+  &.is-discreet {
+    &:focus,
+    &:hover,
+    &:active {
+      color: #e83f6f;
+    }
+    &:disabled {
+      color: initial;
+    }
+  }
+}
 table {
   margin: 30px;
   margin-left: auto;
