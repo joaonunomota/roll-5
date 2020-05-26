@@ -83,27 +83,63 @@
       </tr>
       <tr>
         <th scope="row">3 of a Kind</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('threeOfAKind', threeOfAKind)"
+            :disabled="readonly || value.threeOfAKind !== null"
+          >{{ value.threeOfAKind === null && !readonly ? threeOfAKind : value.threeOfAKind }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">4 of a Kind</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('fourOfAKind', fourOfAKind)"
+            :disabled="readonly || value.fourOfAKind !== null"
+          >{{ value.fourOfAKind === null && !readonly ? fourOfAKind : value.fourOfAKind }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Full House</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('fullHouse', fullHouse)"
+            :disabled="readonly || value.fullHouse !== null"
+          >{{ value.fullHouse === null && !readonly ? fullHouse : value.fullHouse }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Small Straight</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('smallStraight', smallStraight)"
+            :disabled="readonly || value.smallStraight !== null"
+          >{{ value.smallStraight === null && !readonly ? smallStraight : value.smallStraight }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Large Straight</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('largeStraight', largeStraight)"
+            :disabled="readonly || value.largeStraight !== null"
+          >{{ value.largeStraight === null && !readonly ? largeStraight : value.largeStraight }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">ROLL 5 (5 of a Kind)</th>
-        <td></td>
+        <td>
+          <button
+            class="is-discreet"
+            @click="assign('fiveOfAKind', fiveOfAKind)"
+            :disabled="readonly || value.fiveOfAKind !== null"
+          >{{ value.fiveOfAKind === null && !readonly ? fiveOfAKind : value.fiveOfAKind }}</button>
+        </td>
       </tr>
       <tr>
         <th scope="row">Chance</th>
@@ -134,7 +170,16 @@
   </table>
 </template>
 <script>
-import { isArray, isDice, isScorecard, sumIf } from "../utils";
+import {
+  isArray,
+  isDice,
+  isScorecard,
+  sum,
+  sumIf,
+  hasFullHouse,
+  hasSequence,
+  count
+} from "../utils";
 
 export default {
   name: "VScorecard",
@@ -176,6 +221,28 @@ export default {
     sixes: function() {
       return sumIf(this.dice, 6);
     },
+    threeOfAKind: function() {
+      return [1, 2, 3, 4, 5, 6].some(x => count(this.dice, x) >= 3)
+        ? sum(this.dice)
+        : 0;
+    },
+    fourOfAKind: function() {
+      return [1, 2, 3, 4, 5, 6].some(x => count(this.dice, x) >= 4)
+        ? sum(this.dice)
+        : 0;
+    },
+    fullHouse: function() {
+      return hasFullHouse(this.dice) ? 25 : 0;
+    },
+    smallStraight: function() {
+      return hasSequence(this.dice, 4) ? 30 : 0;
+    },
+    largeStraight: function() {
+      return hasSequence(this.dice, 5) ? 40 : 0;
+    },
+    fiveOfAKind: function() {
+      return [1, 2, 3, 4, 5, 6].some(x => count(this.dice, x) >= 5) ? 50 : 0;
+    },
     chance: function() {
       return this.dice.reduce((total, current) => {
         return total + current.pips;
@@ -192,10 +259,18 @@ export default {
       );
     },
     bonus: function() {
-      return this.upper > 63 ? 35 : 0;
+      return this.upper >= 63 ? 35 : 0;
     },
     lower: function() {
-      return this.nullToZero(this.value.chance);
+      return (
+        this.nullToZero(this.value.threeOfAKind) +
+        this.nullToZero(this.value.fourOfAKind) +
+        this.nullToZero(this.value.fullHouse) +
+        this.nullToZero(this.value.smallStraight) +
+        this.nullToZero(this.value.largeStraight) +
+        this.nullToZero(this.value.fiveOfAKind) +
+        this.nullToZero(this.value.chance)
+      );
     },
     grandTotal: function() {
       return this.upper + this.bonus + this.lower;

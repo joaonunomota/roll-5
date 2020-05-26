@@ -9,10 +9,7 @@ const validate = function (values) {
 const sort = function (values) {
     validate(values);
 
-    let result = values;
-    result.sort((a, b) => a.pips - b.pips);
-
-    return result;
+    return values.concat().sort((a, b) => a.pips - b.pips);
 };
 
 const count = function (values, value) {
@@ -32,14 +29,45 @@ const distinct = function (values) {
 const hasFullHouse = function (values) {
     validate(values);
 
-    return [1, 2, 3, 4, 5, 6].some(v => count(values, v) === 3) ||
-        [1, 2, 3, 4, 5, 6].some(v => count(values, v) === 2);
+    const faces = [1, 2, 3, 4, 5, 6];
+
+    return faces.some(x => {
+        return count(values, x) === 3 &&
+            faces.filter(y => y !== x)
+                .some(y => count(values, y) === 2);
+    });
 };
 
 const hasSequence = function (values, length) {
     validate(values);
 
-    return sort(values).some((value, index) => value === values[index + (length - 1)].pips);
+    const result = sort(values);
+    let longestSequence = 0;
+    result.reduce((streak, current, index) => {
+        const previous = result[index - 1];
+
+        if (previous === undefined) {
+            longestSequence = 1;
+            return 1;
+        } else if (current.pips === previous.pips) {
+            return streak;
+        } else if (current.pips !== previous.pips + 1) {
+            longestSequence = streak > longestSequence
+                ? streak
+                : longestSequence;
+            return 1;
+        } else {
+            ++streak;
+            longestSequence = streak > longestSequence
+                ? streak
+                : longestSequence;
+            return streak;
+        }
+    }, 0);
+
+    console.log(longestSequence)
+
+    return longestSequence >= length;
 };
 
 const sum = function (values) {

@@ -45,6 +45,12 @@ export default {
       fours: null,
       fives: null,
       sixes: null,
+      threeOfAKind: null,
+      fourOfAKind: null,
+      fullHouse: null,
+      smallStraight: null,
+      largeStraight: null,
+      fiveOfAKind: null,
       chance: null
     }
   }),
@@ -72,7 +78,22 @@ export default {
     resetGame: function() {
       this.resetRound();
       this.round = 1;
-      this.scorecard = 0;
+      this.scorecard = {
+        name: null,
+        ones: null,
+        twos: null,
+        threes: null,
+        fours: null,
+        fives: null,
+        sixes: null,
+        threeOfAKind: null,
+        fourOfAKind: null,
+        fullHouse: null,
+        smallStraight: null,
+        largeStraight: null,
+        fiveOfAKind: null,
+        chance: null
+      };
     },
     resetRound: function() {
       this.rolls = 3;
