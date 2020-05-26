@@ -38,7 +38,7 @@ export default {
     rolls: 3,
     round: 1,
     scorecard: {
-      name: "AAA",
+      name: null,
       ones: null,
       chance: null
     }

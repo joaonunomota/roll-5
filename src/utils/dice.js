@@ -2,7 +2,7 @@ import { isArray, isDice } from "./validators";
 
 const validate = function (values) {
     if (!isArray(values, isDice)) {
-        throw new Error("Invalid array, not all items dice.");
+        throw new Error("Validation check failed.");
     }
 };
 

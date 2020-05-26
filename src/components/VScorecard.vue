@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th scope="col"></th>
-        <th scope="col">{{ value.name }}</th>
+        <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
       </tr>
     </thead>
     <tbody>
@@ -42,11 +42,11 @@
       </tr>
       <tr>
         <th scope="row">Total</th>
-        <td></td>
+        <td>{{ upper }}</td>
       </tr>
       <tr>
         <th scope="row">Bonus</th>
-        <td></td>
+        <td>{{ bonus }}</td>
       </tr>
       <tr>
         <th scope="col" colspan="2">LOWER SECTION</th>
@@ -90,7 +90,7 @@
       </tr>
       <tr>
         <th scope="row">Total (Upper Section)</th>
-        <td>{{ upper }}</td>
+        <td>{{ upper + bonus }}</td>
       </tr>
       <tr>
         <th scope="row">Total (Lower Section)</th>
@@ -138,6 +138,9 @@ export default {
     },
     upper: function() {
       return this.nullToZero(this.value.ones);
+    },
+    bonus: function() {
+      return this.upper > 63 ? 35 : 0;
     },
     lower: function() {
       return this.nullToZero(this.value.chance);
