@@ -15,4 +15,4 @@ const isScorecard = function (value) {
     return value !== undefined && value.chance !== undefined;
 };
 
-export { isArray, isDice, isScorecard }
+export { isArray, isDice, isScorecard };
