@@ -65,8 +65,6 @@ const hasSequence = function (values, length) {
         }
     }, 0);
 
-    console.log(longestSequence)
-
     return longestSequence >= length;
 };
 
