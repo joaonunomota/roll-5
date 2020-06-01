@@ -290,11 +290,14 @@ export default {
 <style lang="scss">
 button {
   &.is-discreet {
+    color: #1c7c54;
+
     &:focus,
     &:hover,
     &:active {
       color: #e83f6f;
     }
+
     &:disabled {
       color: initial;
     }
