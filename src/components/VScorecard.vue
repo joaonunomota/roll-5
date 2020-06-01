@@ -278,6 +278,10 @@ export default {
   },
   methods: {
     assign: function(property, value) {
+      if (this.fiveOfAKind !== 0 && value !== 0) {
+        this.value.fiveOfAKind += 100;
+      }
+
       this.value[property] = value;
       this.$emit("score");
     },
