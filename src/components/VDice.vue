@@ -1,7 +1,12 @@
 <template>
   <div class="dice-container">
     <v-lock v-model="value.locked" :disabled="disabled" />
-    <div :class="['dice', pips]"></div>
+    <br />
+    <img
+      :alt="alt"
+      :class="['dice', pips]"
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    />
   </div>
 </template>
 <script>
@@ -26,6 +31,9 @@ export default {
     }
   },
   computed: {
+    alt: function() {
+      return `A dice with ${this.pips} pips`;
+    },
     pips: function() {
       switch (this.value.pips) {
         case 6:
