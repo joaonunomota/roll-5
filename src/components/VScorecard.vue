@@ -2,14 +2,11 @@
   <table>
     <thead>
       <tr>
-        <th scope="col"></th>
+        <th scope="col">UPPER SECTION</th>
         <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="col" colspan="2">UPPER SECTION</th>
-      </tr>
       <tr>
         <th scope="row">Aces</th>
         <td>
@@ -79,7 +76,8 @@
         <td>{{ bonus }}</td>
       </tr>
       <tr>
-        <th scope="col" colspan="2">LOWER SECTION</th>
+        <th scope="col">LOWER SECTION</th>
+        <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
       </tr>
       <tr>
         <th scope="row">3 of a Kind</th>
@@ -152,7 +150,8 @@
         </td>
       </tr>
       <tr>
-        <th scope="col" colspan="2">TOTALS</th>
+        <th scope="col">TOTALS</th>
+        <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
       </tr>
       <tr>
         <th scope="row">Total (Upper Section)</th>
