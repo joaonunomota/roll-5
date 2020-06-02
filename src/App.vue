@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <main id="app">
     <div v-show="!isGameOver">
       <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
       <br />
@@ -15,7 +15,7 @@
       <button class="is-fancy" @click="resetGame">Play Again</button>
       <v-scorecard v-model="scorecard" />
     </div>
-  </div>
+  </main>
 </template>
 <script>
 import { VDice, VScorecard } from "./components";
