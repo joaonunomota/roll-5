@@ -2,8 +2,7 @@
   <div id="app">
     <div v-show="!isGameOver">
       <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
-      <p>Round: {{ round }} / 13</p>
-      <p>Rolls Left: {{ rolls }}</p>
+      <br />
       <v-dice
         v-for="index in [0, 1, 2, 3, 4]"
         v-model="dice[index]"
@@ -121,7 +120,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  margin-top: 60px;
+  margin-top: 30px;
 }
 
 body {
