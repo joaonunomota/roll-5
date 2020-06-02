@@ -128,6 +128,12 @@ body {
   background-image: url("./assets/images/background.svg");
 }
 
+input[type="image"] {
+  &:focus {
+    outline: none;
+  }
+}
+
 button {
   display: inline-block;
   border: none;

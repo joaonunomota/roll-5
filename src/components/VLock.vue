@@ -1,11 +1,14 @@
 <template>
-  <button
+  <input
     v-show="!disabled"
+    :alt="alt"
+    :aria-pressed="value"
     :class="['lock', value ? 'closed' : 'open']"
     :disabled="disabled"
-    :aria-pressed="value"
+    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    type="image"
     @click="toggle"
-  ></button>
+  />
 </template>
 <script>
 export default {
@@ -20,6 +23,13 @@ export default {
       type: Boolean,
       required: true,
       validator: value => value !== undefined
+    }
+  },
+  computed: {
+    alt: function() {
+      return this.value
+        ? "A closed lock, dice is not re-rolled. Press to unlock."
+        : "An open lock, dice is re-rolled. Press to lock.";
     }
   },
   methods: {
