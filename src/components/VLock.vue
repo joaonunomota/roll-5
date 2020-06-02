@@ -3,6 +3,7 @@
     v-show="!disabled"
     :class="['lock', value ? 'closed' : 'open']"
     :disabled="disabled"
+    :aria-pressed="value"
     @click="toggle"
   ></button>
 </template>
