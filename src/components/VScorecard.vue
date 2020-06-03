@@ -7,66 +7,36 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">Aces</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('ones', ones)"
-            :disabled="readonly || value.ones !== null"
-          >{{ value.ones === null && !readonly ? ones : value.ones }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Twos</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('twos', twos)"
-            :disabled="readonly || value.twos !== null"
-          >{{ value.twos === null && !readonly ? twos : value.twos }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Threes</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('threes', threes)"
-            :disabled="readonly || value.threes !== null"
-          >{{ value.threes === null && !readonly ? threes : value.threes }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Fours</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('fours', fours)"
-            :disabled="readonly || value.fours !== null"
-          >{{ value.fours === null && !readonly ? fours : value.fours }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Fives</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('fives', fives)"
-            :disabled="readonly || value.fives !== null"
-          >{{ value.fives === null && !readonly ? fives : value.fives }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Sixes</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('sixes', sixes)"
-            :disabled="readonly || value.sixes !== null"
-          >{{ value.sixes === null && !readonly ? sixes : value.sixes }}</button>
-        </td>
-      </tr>
+      <v-row v-model="value.ones" name="Aces" :readonly="readonly" :option="ones" @input="assign" />
+      <v-row v-model="value.twos" name="Twos" :readonly="readonly" :option="twos" @input="assign" />
+      <v-row
+        v-model="value.threes"
+        name="Threes"
+        :readonly="readonly"
+        :option="threes"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.fours"
+        name="Fours"
+        :readonly="readonly"
+        :option="fours"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.fives"
+        name="Fives"
+        :readonly="readonly"
+        :option="fives"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.sixes"
+        name="Sixes"
+        :readonly="readonly"
+        :option="sixes"
+        @input="assign"
+      />
       <tr>
         <th scope="row">Total</th>
         <td>{{ upper }}</td>
@@ -79,76 +49,55 @@
         <th scope="col">LOWER SECTION</th>
         <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
       </tr>
-      <tr>
-        <th scope="row">3 of a Kind</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('threeOfAKind', threeOfAKind)"
-            :disabled="readonly || value.threeOfAKind !== null"
-          >{{ value.threeOfAKind === null && !readonly ? threeOfAKind : value.threeOfAKind }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">4 of a Kind</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('fourOfAKind', fourOfAKind)"
-            :disabled="readonly || value.fourOfAKind !== null"
-          >{{ value.fourOfAKind === null && !readonly ? fourOfAKind : value.fourOfAKind }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Full House</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('fullHouse', fullHouse)"
-            :disabled="readonly || value.fullHouse !== null"
-          >{{ value.fullHouse === null && !readonly ? fullHouse : value.fullHouse }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Small Straight</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('smallStraight', smallStraight)"
-            :disabled="readonly || value.smallStraight !== null"
-          >{{ value.smallStraight === null && !readonly ? smallStraight : value.smallStraight }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Large Straight</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('largeStraight', largeStraight)"
-            :disabled="readonly || value.largeStraight !== null"
-          >{{ value.largeStraight === null && !readonly ? largeStraight : value.largeStraight }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">ROLL 5 (5 of a Kind)</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('fiveOfAKind', fiveOfAKind)"
-            :disabled="readonly || value.fiveOfAKind !== null"
-          >{{ value.fiveOfAKind === null && !readonly ? fiveOfAKind : value.fiveOfAKind }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Chance</th>
-        <td>
-          <button
-            class="is-discreet"
-            @click="assign('chance', chance)"
-            :disabled="readonly || value.chance !== null"
-          >{{ value.chance === null && !readonly ? chance : value.chance }}</button>
-        </td>
-      </tr>
+      <v-row
+        v-model="value.threeOfAKind"
+        name="3 of a Kind"
+        :readonly="readonly"
+        :option="threeOfAKind"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.fourOfAKind"
+        name="4 of a Kind"
+        :readonly="readonly"
+        :option="fourOfAKind"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.fullHouse"
+        name="Full House"
+        :readonly="readonly"
+        :option="fullHouse"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.smallStraight"
+        name="Small Straight"
+        :readonly="readonly"
+        :option="smallStraight"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.largeStraight"
+        name="Large Straight"
+        :readonly="readonly"
+        :option="largeStraight"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.fiveOfAKind"
+        name="ROLL 5 (5 of a Kind)"
+        :readonly="readonly"
+        :option="fiveOfAKind"
+        @input="assign"
+      />
+      <v-row
+        v-model="value.chance"
+        name="Chance"
+        :readonly="readonly"
+        :option="chance"
+        @input="assign"
+      />
       <tr>
         <th scope="col">TOTALS</th>
         <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
@@ -179,9 +128,13 @@ import {
   hasSequence,
   count
 } from "../utils";
+import VRow from "./VRow.vue";
 
 export default {
   name: "VScorecard",
+  components: {
+    VRow
+  },
   props: {
     value: {
       type: Object,
@@ -201,6 +154,9 @@ export default {
       validator: value => value !== undefined
     }
   },
+  data: () => ({
+    allowExtraPoints: false
+  }),
   computed: {
     ones: function() {
       return sumIf(this.dice, 1);
@@ -276,12 +232,13 @@ export default {
     }
   },
   methods: {
-    assign: function(property, value) {
-      if (this.fiveOfAKind !== 0 && value !== 0) {
+    assign: function(value) {
+      if (this.allowExtraPoints && this.fiveOfAKind > 0 && value > 0) {
         this.value.fiveOfAKind += 100;
       }
 
-      this.value[property] = value;
+      this.allowExtraPoints = this.value.fiveOfAKind > 0;
+
       this.$emit("score");
     },
     nullToZero: function(value) {
@@ -291,21 +248,6 @@ export default {
 };
 </script>
 <style lang="scss">
-button {
-  &.is-discreet {
-    color: #1c7c54;
-
-    &:focus,
-    &:hover,
-    &:active {
-      color: #e83f6f;
-    }
-
-    &:disabled {
-      color: initial;
-    }
-  }
-}
 table {
   margin: 30px;
   margin-left: auto;
