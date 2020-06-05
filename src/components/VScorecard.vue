@@ -231,13 +231,25 @@ export default {
       return this.upper + this.bonus + this.lower;
     }
   },
+  watch: {
+    value: {
+      deep: true,
+      handler: function(val) {
+        if (this.allowExtraPoints && val.fiveOfAKind === null) {
+          this.allowExtraPoints = false;
+        }
+      }
+    }
+  },
   methods: {
     assign: function(value) {
-      if (this.allowExtraPoints && this.fiveOfAKind > 0 && value > 0) {
-        this.value.fiveOfAKind += 100;
+      if (this.value.fiveOfAKind !== null) {
+        if (!this.allowExtraPoints) {
+          this.allowExtraPoints = true;
+        } else if (this.fiveOfAKind > 0 && value > 0) {
+          this.value.fiveOfAKind += 100;
+        }
       }
-
-      this.allowExtraPoints = this.value.fiveOfAKind > 0;
 
       this.$emit("score");
     },
