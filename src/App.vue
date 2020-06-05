@@ -1,20 +1,16 @@
 <template>
   <main id="app">
-    <div v-show="!isGameOver">
+    <button v-if="isGameOver" class="is-fancy" @click="resetGame">Play Again</button>
+    <div v-else>
       <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
-      <br />
       <v-dice
         v-for="index in [0, 1, 2, 3, 4]"
         v-model="dice[index]"
         :disabled="!canLock"
         :key="index"
       />
-      <v-scorecard v-model="scorecard" :dice="dice" :readonly="!canLock" @score="nextRound" />
     </div>
-    <div v-show="isGameOver">
-      <button class="is-fancy" @click="resetGame">Play Again</button>
-      <v-scorecard v-model="scorecard" />
-    </div>
+    <v-scorecard v-model="scorecard" :dice="dice" :readonly="!canLock" @score="nextRound" />
   </main>
 </template>
 <script>
@@ -135,10 +131,10 @@ input[type="image"] {
 }
 
 button {
-  display: inline-block;
+  display: block;
   border: none;
   background: transparent;
-  margin: 0;
+  margin: auto;
   text-decoration: none;
   -webkit-appearance: none;
   -moz-appearance: none;
