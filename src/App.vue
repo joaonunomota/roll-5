@@ -10,6 +10,7 @@
     </div>
     <div v-else>
       <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
+      <p>Rolls: {{ rolls }}</p>
       <v-dice
         v-for="index in [0, 1, 2, 3, 4]"
         v-model="dice[index]"
@@ -132,6 +133,10 @@ input[type="text"] {
   border: none;
   background-color: #4cb963;
   text-align: center;
+}
+
+p {
+  color: white;
 }
 
 button {
