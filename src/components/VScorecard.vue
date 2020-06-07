@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th scope="col">UPPER SECTION</th>
-        <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
+        <th scope="col">{{ value.name === null ? "Player 1" : value.name }}</th>
       </tr>
     </thead>
     <tbody>
@@ -39,15 +39,15 @@
       />
       <tr>
         <th scope="row">Total</th>
-        <td>{{ upper }}</td>
+        <td>{{ value.upper }}</td>
       </tr>
       <tr>
         <th scope="row">Bonus</th>
-        <td>{{ bonus }}</td>
+        <td>{{ value.bonus }}</td>
       </tr>
       <tr>
         <th scope="col">LOWER SECTION</th>
-        <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
+        <th scope="col">{{ value.name === null ? "Player 1" : value.name }}</th>
       </tr>
       <v-row
         v-model="value.threeOfAKind"
@@ -100,19 +100,19 @@
       />
       <tr>
         <th scope="col">TOTALS</th>
-        <th scope="col">{{ value.name === null ? "P1" : value.name }}</th>
+        <th scope="col">{{ value.name === null ? "Player 1" : value.name }}</th>
       </tr>
       <tr>
         <th scope="row">Total (Upper Section)</th>
-        <td>{{ upper + bonus }}</td>
+        <td>{{ value.upper + value.bonus }}</td>
       </tr>
       <tr>
         <th scope="row">Total (Lower Section)</th>
-        <td>{{ lower }}</td>
+        <td>{{ value.lower }}</td>
       </tr>
       <tr>
         <th scope="row">Grand Total</th>
-        <td>{{ grandTotal }}</td>
+        <td>{{ value.grandTotal }}</td>
       </tr>
     </tbody>
   </table>
@@ -126,7 +126,8 @@ import {
   sumIf,
   hasFullHouse,
   hasSequence,
-  count
+  count,
+  Scorecard
 } from "../utils";
 import VRow from "./VRow.vue";
 
@@ -137,7 +138,7 @@ export default {
   },
   props: {
     value: {
-      type: Object,
+      type: Scorecard,
       required: true,
       validator: value => isScorecard(value)
     },
@@ -202,33 +203,6 @@ export default {
       return this.dice.reduce((total, current) => {
         return total + current.pips;
       }, 0);
-    },
-    upper: function() {
-      return (
-        this.nullToZero(this.value.ones) +
-        this.nullToZero(this.value.twos) +
-        this.nullToZero(this.value.threes) +
-        this.nullToZero(this.value.fours) +
-        this.nullToZero(this.value.fives) +
-        this.nullToZero(this.value.sixes)
-      );
-    },
-    bonus: function() {
-      return this.upper >= 63 ? 35 : 0;
-    },
-    lower: function() {
-      return (
-        this.nullToZero(this.value.threeOfAKind) +
-        this.nullToZero(this.value.fourOfAKind) +
-        this.nullToZero(this.value.fullHouse) +
-        this.nullToZero(this.value.smallStraight) +
-        this.nullToZero(this.value.largeStraight) +
-        this.nullToZero(this.value.fiveOfAKind) +
-        this.nullToZero(this.value.chance)
-      );
-    },
-    grandTotal: function() {
-      return this.upper + this.bonus + this.lower;
     }
   },
   watch: {
@@ -252,9 +226,6 @@ export default {
       }
 
       this.$emit("score");
-    },
-    nullToZero: function(value) {
-      return value === null ? 0 : value;
     }
   }
 };

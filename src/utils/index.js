@@ -1,4 +1,9 @@
-import { isArray, isDice, isScorecard } from "./validators";
+import {
+    isArray,
+    isDice,
+    isScorecard,
+    isScore
+} from "./validators";
 import {
     sort,
     count,
@@ -8,16 +13,24 @@ import {
     sum,
     sumIf
 } from "./dice";
+import { high, low, scores, setScore } from "./scores";
+import Scorecard from "./scorecard";
 
 export {
     isArray,
     isDice,
     isScorecard,
+    isScore,
     sort,
     count,
     distinct,
     hasFullHouse,
     hasSequence,
     sum,
-    sumIf
+    sumIf,
+    scores,
+    setScore,
+    high,
+    low,
+    Scorecard
 };

@@ -1,6 +1,13 @@
 <template>
   <main id="app">
-    <button v-if="isGameOver" class="is-fancy" @click="resetGame">Play Again</button>
+    <div v-if="isGameOver">
+      <div v-show="!submitted">
+        <input type="text" v-model="scorecard.name" />
+        <button class="is-fancy" @click="submit(high)">Submit</button>
+      </div>
+      <button class="is-fancy" @click="resetGame">Play Again</button>
+      <v-table v-model="highscores" title="Highscores" />
+    </div>
     <div v-else>
       <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
       <v-dice
@@ -9,18 +16,20 @@
         :disabled="!canLock"
         :key="index"
       />
+      <v-scorecard v-model="scorecard" :dice="dice" :readonly="!canLock" @score="nextRound" />
     </div>
-    <v-scorecard v-model="scorecard" :dice="dice" :readonly="!canLock" @score="nextRound" />
   </main>
 </template>
 <script>
-import { VDice, VScorecard } from "./components";
+import { VDice, VScorecard, VTable } from "./components";
+import { high, scores, setScore, Scorecard } from "./utils";
 
 export default {
   name: "App",
   components: {
     VDice,
-    VScorecard
+    VScorecard,
+    VTable
   },
   data: () => ({
     dice: [
@@ -32,22 +41,10 @@ export default {
     ],
     rolls: 3,
     round: 1,
-    scorecard: {
-      name: null,
-      ones: null,
-      twos: null,
-      threes: null,
-      fours: null,
-      fives: null,
-      sixes: null,
-      threeOfAKind: null,
-      fourOfAKind: null,
-      fullHouse: null,
-      smallStraight: null,
-      largeStraight: null,
-      fiveOfAKind: null,
-      chance: null
-    }
+    scorecard: new Scorecard(),
+    high: high,
+    highscores: [],
+    submitted: false
   }),
   computed: {
     canLock: function() {
@@ -65,7 +62,21 @@ export default {
       return this.round > 13;
     }
   },
+  created: function() {
+    this.refresh();
+  },
   methods: {
+    submit: function(table) {
+      this.submitted = true;
+      setScore(table, {
+        name: this.scorecard.name,
+        score: this.scorecard.grandTotal
+      });
+      this.refresh();
+    },
+    refresh: function() {
+      this.highscores = scores(high);
+    },
     nextRound: function() {
       this.resetRound();
       ++this.round;
@@ -73,22 +84,8 @@ export default {
     resetGame: function() {
       this.resetRound();
       this.round = 1;
-      this.scorecard = {
-        name: null,
-        ones: null,
-        twos: null,
-        threes: null,
-        fours: null,
-        fives: null,
-        sixes: null,
-        threeOfAKind: null,
-        fourOfAKind: null,
-        fullHouse: null,
-        smallStraight: null,
-        largeStraight: null,
-        fiveOfAKind: null,
-        chance: null
-      };
+      this.scorecard = new Scorecard();
+      this.submitted = false;
     },
     resetRound: function() {
       this.rolls = 3;
@@ -128,6 +125,13 @@ input[type="image"] {
   &:focus {
     outline: none;
   }
+}
+
+input[type="text"] {
+  box-shadow: 0 0 0 2px #034732, 0 0 0 4px #4cb963;
+  border: none;
+  background-color: #4cb963;
+  text-align: center;
 }
 
 button {
