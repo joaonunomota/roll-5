@@ -27,11 +27,9 @@ const isScorecard = function (value) {
 const isScore = function (value) {
     return value !== undefined &&
         value.name !== undefined &&
-        value.name != "" &&
+        value.name !== "" &&
         value.score !== undefined &&
-        value.score > 0 &&
-        value.rank !== undefined &&
-        value.rank > 0;
+        value.score > 0;
 };
 
 export { isArray, isDice, isScorecard, isScore };

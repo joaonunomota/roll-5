@@ -1,12 +1,13 @@
 <template>
   <main id="app">
     <div v-if="isGameOver">
-      <div v-show="!submitted">
+      <div v-show="!submitted && (isHighscore || isLowscore)">
         <input type="text" v-model="scorecard.name" />
-        <button class="is-fancy" @click="submit(high)">Submit</button>
+        <button class="is-fancy" :disabled="!scorecard.name" @click="submit">Submit</button>
       </div>
       <button class="is-fancy" @click="resetGame">Play Again</button>
       <v-table v-model="highscores" title="Highscores" />
+      <v-table v-model="lowscores" title="Lowscores" />
     </div>
     <div v-else>
       <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
@@ -23,7 +24,7 @@
 </template>
 <script>
 import { VDice, VScorecard, VTable } from "./components";
-import { high, scores, setScore, Scorecard } from "./utils";
+import { high, low, scores, setScore, Scorecard } from "./utils";
 
 export default {
   name: "App",
@@ -44,7 +45,9 @@ export default {
     round: 1,
     scorecard: new Scorecard(),
     high: high,
+    low: low,
     highscores: [],
+    lowscores: [],
     submitted: false
   }),
   computed: {
@@ -61,22 +64,45 @@ export default {
     },
     isGameOver() {
       return this.round > 13;
+    },
+    isHighscore: function() {
+      return (
+        this.highscores.length < 5 ||
+        !this.highscores.every(h => h.score >= this.scorecard.grandTotal)
+      );
+    },
+    isLowscore: function() {
+      return (
+        this.lowscores.length < 5 ||
+        !this.lowscores.every(l => l.score <= this.scorecard.grandTotal)
+      );
     }
   },
   created: function() {
     this.refresh();
   },
   methods: {
-    submit: function(table) {
-      this.submitted = true;
-      setScore(table, {
+    submit: function() {
+      const result = {
         name: this.scorecard.name,
         score: this.scorecard.grandTotal
-      });
+      };
+
+      this.submitted = true;
+
+      if (this.isHighscore) {
+        setScore(high, result);
+      }
+
+      if (this.isLowscore) {
+        setScore(low, result);
+      }
+
       this.refresh();
     },
     refresh: function() {
       this.highscores = scores(high);
+      this.lowscores = scores(low);
     },
     nextRound: function() {
       this.resetRound();
