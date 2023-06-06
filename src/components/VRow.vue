@@ -1,44 +1,43 @@
+<script setup lang="ts">
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    validator: (value: number) => value !== undefined && (!Number.isNaN(value) || value === null)
+  },
+  name: {
+    type: String,
+    required: true,
+    validator: (value: string) => [undefined, null, ""].indexOf(value) === -1
+  },
+  option: {
+    type: Number,
+    required: true,
+    validator: (value: number) => value !== undefined && value !== null
+  },
+  readonly: {
+    type: Boolean,
+    required: true,
+    validator: (value: boolean) => value !== undefined && value !== null
+  }
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const click = () => emit("update:modelValue", props.option);
+</script>
+
 <template>
   <tr>
     <th id="label" scope="row">{{ name }}</th>
-    <td v-if="value === null && !readonly">
-      <button
-        class="is-discreet"
-        aria-describedby="label"
-        @click="$emit('input', option)"
-      >{{ option }}</button>
+    <td v-if="modelValue === null && !readonly">
+      <button class="is-discreet" aria-describedby="label" @click="click">
+        {{ option }}
+      </button>
     </td>
-    <td v-else>{{ value === null ? "" : value }}</td>
+    <td v-else>{{ modelValue === null ? "" : modelValue }}</td>
   </tr>
 </template>
-<script>
-export default {
-  name: "VRow",
-  props: {
-    value: {
-      type: Number,
-      validator: value =>
-        value !== undefined && (!Number.isNaN(value) || value === null)
-    },
-    name: {
-      type: String,
-      required: true,
-      validator: value => [undefined, null, ""].indexOf(value) === -1
-    },
-    option: {
-      type: Number,
-      required: true,
-      default: () => [],
-      validator: value => value !== undefined && value !== null
-    },
-    readonly: {
-      type: Boolean,
-      required: true,
-      validator: value => value !== undefined && value !== null
-    }
-  }
-};
-</script>
+
 <style lang="scss">
 button {
   &.is-discreet {

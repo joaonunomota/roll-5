@@ -1,6 +1,50 @@
+<script setup lang="ts">
+import { computed } from "vue";
+import VLock from "./VLock.vue";
+import { isDice } from "../utils";
+
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true,
+    validator: (value) => isDice(value)
+  },
+  disabled: {
+    type: Boolean,
+    required: true,
+    validator: (value) => value !== undefined
+  }
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const pips = computed(() => {
+  switch (props.modelValue.pips) {
+    case 6:
+      return "six";
+    case 5:
+      return "five";
+    case 4:
+      return "four";
+    case 3:
+      return "three";
+    case 2:
+      return "two";
+    default:
+      return "one";
+  }
+});
+const alt = computed(() => {
+  return `A dice with ${pips.value} pips`;
+});
+
+const update = (locked: boolean) =>
+  emit("update:modelValue", { pips: props.modelValue.pips, locked: locked });
+</script>
+
 <template>
   <div class="dice-container">
-    <v-lock v-model="value.locked" :disabled="disabled" />
+    <v-lock :value="modelValue.locked" :disabled="disabled" @click="update" />
     <br />
     <img
       :alt="alt"
@@ -9,50 +53,7 @@
     />
   </div>
 </template>
-<script>
-import VLock from "./VLock.vue";
-import { isDice } from "../utils";
 
-export default {
-  name: "VDice",
-  components: {
-    VLock
-  },
-  props: {
-    value: {
-      type: Object,
-      required: true,
-      validator: value => isDice(value)
-    },
-    disabled: {
-      type: Boolean,
-      required: true,
-      validator: value => value !== undefined
-    }
-  },
-  computed: {
-    alt: function() {
-      return `A dice with ${this.pips} pips`;
-    },
-    pips: function() {
-      switch (this.value.pips) {
-        case 6:
-          return "six";
-        case 5:
-          return "five";
-        case 4:
-          return "four";
-        case 3:
-          return "three";
-        case 2:
-          return "two";
-        default:
-          return "one";
-      }
-    }
-  }
-};
-</script>
 <style lang="scss">
 .dice-container {
   display: inline-block;

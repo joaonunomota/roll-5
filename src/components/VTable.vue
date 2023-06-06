@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import { isArray } from "../utils";
+import { isScore } from "../utils/validators";
+
+defineProps({
+  rows: {
+    type: Array,
+    required: true,
+    validator: (value) => isArray(value, isScore)
+  },
+  title: {
+    type: String,
+    required: true,
+    validator: (value) => value !== undefined
+  }
+});
+</script>
+
 <template>
   <table>
     <thead>
@@ -10,32 +28,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in value" :key="item.rank">
-        <td>{{ item.name }}</td>
-        <td>{{ item.score }}</td>
+      <tr v-for="row in rows" :key="row.rank">
+        <td>{{ row.name }}</td>
+        <td>{{ row.score }}</td>
       </tr>
     </tbody>
   </table>
 </template>
-<script>
-import { isArray } from "../utils";
-import { isScore } from "../utils/validators";
-export default {
-  name: "VTable",
-  props: {
-    value: {
-      type: Array,
-      required: true,
-      validator: value => isArray(value, isScore)
-    },
-    title: {
-      type: String,
-      required: true,
-      validator: value => value !== undefined
-    }
-  }
-};
-</script>
+
 <style lang="scss">
 table {
   margin: 10px auto;

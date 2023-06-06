@@ -1,3 +1,87 @@
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import { VDice, VScorecard, VTable } from "./components";
+import { type Dice, type Score } from "./types";
+import { high, low, scores, setScore, Scorecard } from "./utils";
+
+const dice = ref<Dice[]>([
+  { pips: 1, locked: false },
+  { pips: 1, locked: false },
+  { pips: 1, locked: false },
+  { pips: 1, locked: false },
+  { pips: 1, locked: false }
+]);
+const rolls = ref(3);
+const round = ref(1);
+const scorecard = ref(new Scorecard());
+const highscores = ref<Score[]>([]);
+const lowscores = ref<Score[]>([]);
+const submitted = ref(false);
+
+const canLock = computed(() => rolls.value < 3);
+const canRoll = computed(() => {
+  return dice.value.some((d) => !d.locked) && rolls.value > 0 && !isGameOver.value;
+});
+const isGameOver = computed(() => round.value > 13);
+const isHighscore = computed(() => {
+  return (
+    highscores.value.length < 5 || !highscores.value.every((h) => h.score >= scorecard.value.total)
+  );
+});
+const isLowscore = computed(() => {
+  return (
+    lowscores.value.length < 5 || !lowscores.value.every((l) => l.score <= scorecard.value.total)
+  );
+});
+const submit = () => {
+  const result = {
+    name: scorecard.value.name,
+    score: scorecard.value.total
+  };
+
+  submitted.value = true;
+
+  if (isHighscore.value) {
+    setScore(high, result);
+  }
+
+  if (isLowscore.value) {
+    setScore(low, result);
+  }
+
+  refresh();
+};
+const refresh = () => {
+  highscores.value = scores(high);
+  lowscores.value = scores(low);
+};
+const nextRound = () => {
+  resetRound();
+  round.value += 1;
+};
+const resetGame = () => {
+  resetRound();
+  round.value = 1;
+  scorecard.value = new Scorecard();
+  submitted.value = false;
+};
+const resetRound = () => {
+  rolls.value = 3;
+  dice.value = dice.value.map((item) => {
+    item.locked = false;
+    return item;
+  });
+};
+const roll = () => {
+  rolls.value -= 1;
+  for (let index = 0; index < dice.value.length; index++) {
+    if (!dice.value[index].locked) {
+      dice.value[index].pips = Math.floor(Math.random() * 6) + 1;
+    }
+  }
+};
+</script>
+
 <template>
   <main id="app">
     <div v-if="isGameOver">
@@ -6,8 +90,8 @@
         <button class="is-fancy" :disabled="!scorecard.name" @click="submit">Submit</button>
       </div>
       <button class="is-fancy" @click="resetGame">Play Again</button>
-      <v-table v-model="highscores" title="Highscores" />
-      <v-table v-model="lowscores" title="Lowscores" />
+      <v-table :rows="highscores" title="Highscores" />
+      <v-table :rows="lowscores" title="Lowscores" />
     </div>
     <div v-else>
       <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
@@ -22,118 +106,8 @@
     </div>
   </main>
 </template>
-<script>
-import { VDice, VScorecard, VTable } from "./components";
-import { high, low, scores, setScore, Scorecard } from "./utils";
 
-export default {
-  name: "App",
-  components: {
-    VDice,
-    VScorecard,
-    VTable
-  },
-  data: () => ({
-    dice: [
-      { pips: 1, locked: false },
-      { pips: 1, locked: false },
-      { pips: 1, locked: false },
-      { pips: 1, locked: false },
-      { pips: 1, locked: false }
-    ],
-    rolls: 3,
-    round: 1,
-    scorecard: new Scorecard(),
-    high: high,
-    low: low,
-    highscores: [],
-    lowscores: [],
-    submitted: false
-  }),
-  computed: {
-    canLock: function() {
-      return this.rolls < 3;
-    },
-    canRoll: function() {
-      return (
-        this.dice.some(d => !d.locked) && this.rolls > 0 && !this.isGameOver
-      );
-    },
-    canScore: function() {
-      return this.rolls < 3 && !this.isGameOver;
-    },
-    isGameOver() {
-      return this.round > 13;
-    },
-    isHighscore: function() {
-      return (
-        this.highscores.length < 5 ||
-        !this.highscores.every(h => h.score >= this.scorecard.grandTotal)
-      );
-    },
-    isLowscore: function() {
-      return (
-        this.lowscores.length < 5 ||
-        !this.lowscores.every(l => l.score <= this.scorecard.grandTotal)
-      );
-    }
-  },
-  created: function() {
-    this.refresh();
-  },
-  methods: {
-    submit: function() {
-      const result = {
-        name: this.scorecard.name,
-        score: this.scorecard.grandTotal
-      };
-
-      this.submitted = true;
-
-      if (this.isHighscore) {
-        setScore(high, result);
-      }
-
-      if (this.isLowscore) {
-        setScore(low, result);
-      }
-
-      this.refresh();
-    },
-    refresh: function() {
-      this.highscores = scores(high);
-      this.lowscores = scores(low);
-    },
-    nextRound: function() {
-      this.resetRound();
-      ++this.round;
-    },
-    resetGame: function() {
-      this.resetRound();
-      this.round = 1;
-      this.scorecard = new Scorecard();
-      this.submitted = false;
-    },
-    resetRound: function() {
-      this.rolls = 3;
-      this.dice = this.dice.map(item => {
-        item.locked = false;
-        return item;
-      });
-    },
-    roll: function() {
-      --this.rolls;
-      for (let index = 0; index < this.dice.length; ++index) {
-        if (!this.dice[index].locked) {
-          this.dice[index].pips = Math.floor(Math.random() * 6) + 1;
-        }
-      }
-    }
-  }
-};
-</script>
 <style lang="scss">
-@import "~normalize.css";
 #app {
   font-family: "MinecraftiaRegular";
   font-size: 14px;

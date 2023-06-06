@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import { computed } from "vue";
+
+const props = defineProps({
+  value: {
+    type: Boolean,
+    required: true,
+    validator: (value) => value !== undefined
+  },
+  disabled: {
+    type: Boolean,
+    required: true,
+    validator: (value) => value !== undefined
+  }
+});
+
+const emit = defineEmits(["click"]);
+
+const alt = computed(() => {
+  return props.value
+    ? "A closed lock, dice is not re-rolled. Press to unlock."
+    : "An open lock, dice is re-rolled. Press to lock.";
+});
+
+const toggle = () => emit("click", !props.value);
+</script>
+
 <template>
   <input
     v-show="!disabled"
@@ -10,35 +37,7 @@
     @click="toggle"
   />
 </template>
-<script>
-export default {
-  name: "VLock",
-  props: {
-    value: {
-      type: Boolean,
-      required: true,
-      validator: value => value !== undefined
-    },
-    disabled: {
-      type: Boolean,
-      required: true,
-      validator: value => value !== undefined
-    }
-  },
-  computed: {
-    alt: function() {
-      return this.value
-        ? "A closed lock, dice is not re-rolled. Press to unlock."
-        : "An open lock, dice is re-rolled. Press to lock.";
-    }
-  },
-  methods: {
-    toggle: function() {
-      this.$emit("input", !this.value);
-    }
-  }
-};
-</script>
+
 <style lang="scss">
 .lock {
   height: 64px;
