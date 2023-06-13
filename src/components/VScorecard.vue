@@ -12,10 +12,10 @@ import {
   Scorecard
 } from "../utils";
 import VRow from "./VRow.vue";
-import type { Dice } from "../types";
+import type { Dice, MutableScorecard } from "../types";
 
 const props = defineProps({
-  modelValue: {
+  value: {
     type: Scorecard,
     required: true,
     validator: (value: Scorecard) => isScorecard(value)
@@ -63,7 +63,7 @@ const chance = computed(() => {
 });
 
 watch(
-  props.modelValue,
+  props.value,
   (val) => {
     if (allowExtraPoints.value && val.fiveOfAKind === null) {
       allowExtraPoints.value = false;
@@ -72,16 +72,20 @@ watch(
   { deep: true }
 );
 
-const assign = (val: number) => {
-  if (props.modelValue.fiveOfAKind !== null) {
+const update = (property: keyof MutableScorecard, val: number) => {
+  let scorecard = Object.assign(new Scorecard(), props.value);
+
+  scorecard[property] = val;
+
+  if (scorecard.fiveOfAKind !== null) {
     if (!allowExtraPoints.value) {
       allowExtraPoints.value = true;
     } else if (fiveOfAKind.value > 0 && val > 0) {
-      props.modelValue.fiveOfAKind += 100;
+      scorecard.fiveOfAKind += 100;
     }
   }
 
-  emit("score");
+  emit("score", scorecard);
 };
 </script>
 
@@ -90,128 +94,128 @@ const assign = (val: number) => {
     <thead>
       <tr>
         <th scope="col">UPPER SECTION</th>
-        <th scope="col">{{ modelValue.name === null ? "Player 1" : modelValue.name }}</th>
+        <th scope="col">{{ value.name === null ? "Player 1" : value.name }}</th>
       </tr>
     </thead>
     <tbody>
       <v-row
         name="Aces"
-        v-model="modelValue.ones"
+        :value="value.ones"
         :readonly="readonly"
         :option="ones"
-        @click="assign"
+        @update="update('ones', $event)"
       />
       <v-row
         name="Twos"
-        v-model="modelValue.twos"
+        :value="value.twos"
         :readonly="readonly"
         :option="twos"
-        @click="assign"
+        @update="update('twos', $event)"
       />
       <v-row
         name="Threes"
-        v-model="modelValue.threes"
+        :value="value.threes"
         :readonly="readonly"
         :option="threes"
-        @click="assign"
+        @update="update('threes', $event)"
       />
       <v-row
         name="Fours"
-        v-model="modelValue.fours"
+        :value="value.fours"
         :readonly="readonly"
         :option="fours"
-        @click="assign"
+        @update="update('fours', $event)"
       />
       <v-row
         name="Fives"
-        v-model="modelValue.fives"
+        :value="value.fives"
         :readonly="readonly"
         :option="fives"
-        @click="assign"
+        @update="update('fives', $event)"
       />
       <v-row
         name="Sixes"
-        v-model="modelValue.sixes"
+        :value="value.sixes"
         :readonly="readonly"
         :option="sixes"
-        @click="assign"
+        @update="update('sixes', $event)"
       />
       <tr>
         <th scope="row">Total</th>
-        <td>{{ modelValue.upper }}</td>
+        <td>{{ value.upper }}</td>
       </tr>
       <tr>
         <th scope="row">Bonus</th>
-        <td>{{ modelValue.bonus }}</td>
+        <td>{{ value.bonus }}</td>
       </tr>
       <tr>
         <th scope="col">LOWER SECTION</th>
-        <th scope="col">{{ modelValue.name === null ? "Player 1" : modelValue.name }}</th>
+        <th scope="col">{{ value.name === null ? "Player 1" : value.name }}</th>
       </tr>
       <v-row
         name="3 of a Kind"
-        v-model="modelValue.threeOfAKind"
+        :value="value.threeOfAKind"
         :readonly="readonly"
         :option="threeOfAKind"
-        @click="assign"
+        @update="update('threeOfAKind', $event)"
       />
       <v-row
         name="4 of a Kind"
-        v-model="modelValue.fourOfAKind"
+        :value="value.fourOfAKind"
         :readonly="readonly"
         :option="fourOfAKind"
-        @click="assign"
+        @update="update('fourOfAKind', $event)"
       />
       <v-row
         name="Full House"
-        v-model="modelValue.fullHouse"
+        :value="value.fullHouse"
         :readonly="readonly"
         :option="fullHouse"
-        @click="assign"
+        @update="update('fullHouse', $event)"
       />
       <v-row
         name="Small Straight"
-        v-model="modelValue.smallStraight"
+        :value="value.smallStraight"
         :readonly="readonly"
         :option="smallStraight"
-        @click="assign"
+        @update="update('smallStraight', $event)"
       />
       <v-row
         name="Large Straight"
-        v-model="modelValue.largeStraight"
+        :value="value.largeStraight"
         :readonly="readonly"
         :option="largeStraight"
-        @click="assign"
+        @update="update('largeStraight', $event)"
       />
       <v-row
         name="ROLL 5 (5 of a Kind)"
-        v-model="modelValue.fiveOfAKind"
+        :value="value.fiveOfAKind"
         :readonly="readonly"
         :option="fiveOfAKind"
-        @click="assign"
+        @update="update('fiveOfAKind', $event)"
       />
       <v-row
         name="Chance"
-        v-model="modelValue.chance"
+        :value="value.chance"
         :readonly="readonly"
         :option="chance"
-        @click="assign"
+        @update="update('chance', $event)"
       />
       <tr>
         <th scope="col">TOTALS</th>
-        <th scope="col">{{ modelValue.name === null ? "Player 1" : modelValue.name }}</th>
+        <th scope="col">{{ value.name === null ? "Player 1" : value.name }}</th>
       </tr>
       <tr>
         <th scope="row">Total (Upper Section)</th>
-        <td>{{ modelValue.upper + modelValue.bonus }}</td>
+        <td>{{ value.upper + value.bonus }}</td>
       </tr>
       <tr>
         <th scope="row">Total (Lower Section)</th>
-        <td>{{ modelValue.lower }}</td>
+        <td>{{ value.lower }}</td>
       </tr>
       <tr>
         <th scope="row">Grand Total</th>
-        <td>{{ modelValue.total }}</td>
+        <td>{{ value.total }}</td>
       </tr>
     </tbody>
   </table>

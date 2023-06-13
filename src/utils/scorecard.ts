@@ -1,5 +1,7 @@
-export default class Scorecard {
-  name: number | null = null;
+import { type MutableScorecard } from "../types";
+
+export default class Scorecard implements MutableScorecard {
+  name: string | null = null;
   ones: number | null = null;
   twos: number | null = null;
   threes: number | null = null;

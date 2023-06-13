@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import type { PropType } from "vue";
+
 const props = defineProps({
-  modelValue: {
-    type: Number,
+  value: {
+    type: Object as PropType<number | null>,
+    required: true,
     validator: (value: number) => value !== undefined && (!Number.isNaN(value) || value === null)
   },
   name: {
@@ -21,20 +24,20 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update"]);
 
-const click = () => emit("update:modelValue", props.option);
+const click = () => emit("update", props.option);
 </script>
 
 <template>
   <tr>
     <th id="label" scope="row">{{ name }}</th>
-    <td v-if="modelValue === null && !readonly">
+    <td v-if="value === null && !readonly">
       <button class="is-discreet" aria-describedby="label" @click="click">
         {{ option }}
       </button>
     </td>
-    <td v-else>{{ modelValue === null ? "" : modelValue }}</td>
+    <td v-else>{{ value === null ? "" : value }}</td>
   </tr>
 </template>
 

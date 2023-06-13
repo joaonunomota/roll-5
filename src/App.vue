@@ -55,6 +55,10 @@ const refresh = () => {
   highscores.value = scores(high);
   lowscores.value = scores(low);
 };
+const score = (value: Scorecard) => {
+  scorecard.value = value;
+  nextRound();
+};
 const nextRound = () => {
   resetRound();
   round.value += 1;
@@ -102,7 +106,7 @@ const roll = () => {
         :disabled="!canLock"
         :key="index"
       />
-      <v-scorecard v-model="scorecard" :dice="dice" :readonly="!canLock" @score="nextRound" />
+      <v-scorecard :value="scorecard" :dice="dice" :readonly="!canLock" @score="score" />
     </div>
   </main>
 </template>

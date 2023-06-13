@@ -36,7 +36,7 @@ const pips = computed(() => {
       return "one";
   }
 });
-const alt = computed(() => `A dice with ${pips.value} ${pips.value === "one" ? "pip" : "pips"}` );
+const alt = computed(() => `A dice with ${pips.value} ${pips.value === "one" ? "pip" : "pips"}`);
 
 const update = (locked: boolean) =>
   emit("update:modelValue", { pips: props.modelValue.pips, locked: locked });
