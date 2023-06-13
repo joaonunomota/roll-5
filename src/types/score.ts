@@ -1,5 +1,4 @@
 export default interface Score {
-    name: string;
-    score: number;
-  };
-  
+  name: string;
+  score: number;
+}
