@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import type { PropType } from "vue";
 import VLock from "./VLock.vue";
 import { isDice } from "../utils";
+import type { Dice } from "../types";
 
 const props = defineProps({
   modelValue: {
-    type: Object,
+    type: Object as PropType<Dice>,
     required: true,
-    validator: (value) => isDice(value)
+    validator: (value: Dice) => isDice(value)
   },
   disabled: {
     type: Boolean,
     required: true,
-    validator: (value) => value !== undefined
+    validator: (value: boolean) => value !== undefined
   }
 });
 
@@ -34,9 +36,7 @@ const pips = computed(() => {
       return "one";
   }
 });
-const alt = computed(() => {
-  return `A dice with ${pips.value} pips`;
-});
+const alt = computed(() => `A dice with ${pips.value} ${pips.value === "one" ? "pip" : "pips"}` );
 
 const update = (locked: boolean) =>
   emit("update:modelValue", { pips: props.modelValue.pips, locked: locked });
