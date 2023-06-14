@@ -3,7 +3,7 @@ import type { PropType } from "vue";
 
 const props = defineProps({
   value: {
-    type: Object as PropType<number | null>,
+    type: Number as PropType<number | null>,
     default: null,
     validator: (value: number) => value !== undefined && (!Number.isNaN(value) || value === null)
   },
