@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import type { PropType } from "vue";
 import { isArray } from "../utils";
 import { isScore } from "../utils/validators";
+import type { Score } from "../types";
 
 defineProps({
   rows: {
-    type: Array,
+    type: Array as PropType<Score[]>,
     required: true,
     validator: (value) => isArray(value, isScore)
   },
@@ -28,7 +30,7 @@ defineProps({
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in rows" :key="row.rank">
+      <tr v-for="(row, index) in rows" :key="index">
         <td>{{ row.name }}</td>
         <td>{{ row.score }}</td>
       </tr>

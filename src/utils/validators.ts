@@ -1,7 +1,7 @@
 import type Scorecard from "./scorecard";
 import { type Dice, type Score } from "../types";
 
-const isArray = <T>(value: T[], func: (v: T) => boolean) => {
+const isArray = <T>(value: unknown, func: (v: T) => boolean) => {
   return value !== undefined && Array.isArray(value) && value.every(func);
 };
 

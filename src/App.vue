@@ -34,8 +34,8 @@ const isLowscore = computed(() => {
   );
 });
 const submit = () => {
-  const result = {
-    name: scorecard.value.name,
+  const result: Score = {
+    name: scorecard.value.name!,
     score: scorecard.value.total
   };
 

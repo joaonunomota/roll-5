@@ -4,7 +4,7 @@ import type { PropType } from "vue";
 const props = defineProps({
   value: {
     type: Object as PropType<number | null>,
-    required: true,
+    default: null,
     validator: (value: number) => value !== undefined && (!Number.isNaN(value) || value === null)
   },
   name: {
