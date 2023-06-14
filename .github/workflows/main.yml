@@ -1,0 +1,44 @@
+name: pages-build-deployment
+
+on:
+  push:
+    branches: [ '$default-branch' ]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - run: npm ci
+
+      - run: npm run test:unit
+
+      - run: npm run build-only
+
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./dist
+          
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/deploy-pages@v2
