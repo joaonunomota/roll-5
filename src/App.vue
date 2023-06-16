@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { VDice, VScorecard, VTable } from "./components";
-import { type Dice, type Score } from "./types";
-import { high, low, scores, setScore, Scorecard } from "./utils";
+import { VDice, VScorecard, VScores } from "./components";
+import { type Dice } from "./types";
+import { Scorecard } from "./utils";
 
 const dice = ref<Dice[]>([
   { pips: 1, locked: false },
@@ -14,8 +14,6 @@ const dice = ref<Dice[]>([
 const rolls = ref(3);
 const round = ref(1);
 const scorecard = ref(new Scorecard());
-const highscores = ref<Score[]>([]);
-const lowscores = ref<Score[]>([]);
 const submitted = ref(false);
 
 const canLock = computed(() => rolls.value < 3);
@@ -23,38 +21,6 @@ const canRoll = computed(() => {
   return dice.value.some((d) => !d.locked) && rolls.value > 0 && !isGameOver.value;
 });
 const isGameOver = computed(() => round.value > 13);
-const isHighscore = computed(() => {
-  return (
-    highscores.value.length < 5 || !highscores.value.every((h) => h.score >= scorecard.value.total)
-  );
-});
-const isLowscore = computed(() => {
-  return (
-    lowscores.value.length < 5 || !lowscores.value.every((l) => l.score <= scorecard.value.total)
-  );
-});
-const submit = () => {
-  const result: Score = {
-    name: scorecard.value.name!,
-    score: scorecard.value.total
-  };
-
-  submitted.value = true;
-
-  if (isHighscore.value) {
-    setScore(high, result);
-  }
-
-  if (isLowscore.value) {
-    setScore(low, result);
-  }
-
-  refresh();
-};
-const refresh = () => {
-  highscores.value = scores(high);
-  lowscores.value = scores(low);
-};
 const score = (value: Scorecard) => {
   scorecard.value = value;
   nextRound();
@@ -88,15 +54,7 @@ const roll = () => {
 
 <template>
   <main id="app">
-    <div v-if="isGameOver">
-      <div v-show="!submitted && (isHighscore || isLowscore)">
-        <input type="text" v-model="scorecard.name" />
-        <button class="is-fancy" :disabled="!scorecard.name" @click="submit">Submit</button>
-      </div>
-      <button class="is-fancy" @click="resetGame">Play Again</button>
-      <v-table :rows="highscores" title="Highscores" />
-      <v-table :rows="lowscores" title="Lowscores" />
-    </div>
+    <v-scores v-if="isGameOver" :score="scorecard.total" @reset="resetGame" />
     <div v-else>
       <button class="is-fancy" :disabled="!canRoll" @click="roll">Roll</button>
       <p>Rolls: {{ rolls }}</p>
