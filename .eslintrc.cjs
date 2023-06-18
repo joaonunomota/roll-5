@@ -9,6 +9,12 @@ module.exports = {
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier/skip-formatting'
   ],
+  overrides: [
+    {
+      files: ['**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)'],
+      extends: ['plugin:testing-library/vue']
+    }
+  ],
   parserOptions: {
     ecmaVersion: 'latest'
   }

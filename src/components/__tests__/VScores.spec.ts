@@ -35,14 +35,18 @@ describe("VScores", () => {
       render(VScores, { props: { score: 300 } });
 
       const input = screen.getByLabelText("Name");
-      await fireEvent.input(input, { target: { value: "Elvis Costello" } });
+      await fireEvent.update(input, "Elvis Costello");
 
       const submit = screen.getByRole("button", { name: "Submit" });
       await fireEvent.click(submit);
 
-      const highscores = screen.getByRole("row", { name: "Highscores" }).closest("table");
-      expect(highscores).not.toBe(null);
-      within(highscores!).getByRole("row", { name: "Elvis Costello 300" });
+      const tables = screen
+        .getAllByRole("table")
+        .filter((x) => within(x).queryByRole("row", { name: "Highscores" }));
+      expect(tables).lengthOf(1);
+
+      const [highscores] = tables;
+      within(highscores).getByRole("row", { name: "Elvis Costello 300" });
     });
 
     it("player has a highscore", async () => {
@@ -59,19 +63,22 @@ describe("VScores", () => {
       render(VScores, { props: { score: 250 } });
 
       const input = screen.getByLabelText("Name");
-      await fireEvent.input(input, { target: { value: "Robert De Niro" } });
+      await fireEvent.update(input, "Robert De Niro");
 
       const submit = screen.getByRole("button", { name: "Submit" });
       await fireEvent.click(submit);
 
-      const highscores = screen.getByRole("row", { name: "Highscores" }).closest("table");
-      expect(highscores).not.toBe(null);
+      const tables = screen
+        .getAllByRole("table")
+        .filter((x) => within(x).queryByRole("row", { name: "Highscores" }));
+      expect(tables).lengthOf(1);
 
-      const first = within(highscores!).getByRole("row", { name: "Marlon Brando 500" });
-      const second = within(highscores!).getByRole("row", { name: "Al Pacino 400" });
-      const third = within(highscores!).getByRole("row", { name: "James Caan 300" });
-      const fourth = within(highscores!).getByRole("row", { name: "Robert De Niro 250" });
-      const fifth = within(highscores!).getByRole("row", { name: "Diane Keaton 200" });
+      const [highscores] = tables;
+      const first = within(highscores).getByRole("row", { name: "Marlon Brando 500" });
+      const second = within(highscores).getByRole("row", { name: "Al Pacino 400" });
+      const third = within(highscores).getByRole("row", { name: "James Caan 300" });
+      const fourth = within(highscores).getByRole("row", { name: "Robert De Niro 250" });
+      const fifth = within(highscores).getByRole("row", { name: "Diane Keaton 200" });
 
       // expect the top 5 scores to be in descending order
       expect(first.compareDocumentPosition(second)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
@@ -86,13 +93,17 @@ describe("VScores", () => {
       render(VScores, { props: { score: 300 } });
 
       const input = screen.getByLabelText("Name");
-      await fireEvent.input(input, { target: { value: "Elvis Costello" } });
+      await fireEvent.update(input, "Elvis Costello");
 
       const submit = screen.getByRole("button", { name: "Submit" });
       await fireEvent.click(submit);
 
-      const lowscores = screen.getByRole("row", { name: "Lowscores" }).closest("table");
-      expect(lowscores).not.toBe(null);
+      const tables = screen
+        .getAllByRole("table")
+        .filter((x) => within(x).queryByRole("row", { name: "Lowscores" }));
+      expect(tables).lengthOf(1);
+
+      const [lowscores] = tables;
       within(lowscores!).getByRole("row", { name: "Elvis Costello 300" });
     });
 
@@ -110,19 +121,22 @@ describe("VScores", () => {
       render(VScores, { props: { score: 250 } });
 
       const input = screen.getByLabelText("Name");
-      await fireEvent.input(input, { target: { value: "Robert De Niro" } });
+      await fireEvent.update(input, "Robert De Niro");
 
       const submit = screen.getByRole("button", { name: "Submit" });
       await fireEvent.click(submit);
 
-      const lowscores = screen.getByRole("row", { name: "Lowscores" }).closest("table");
-      expect(lowscores).not.toBe(null);
+      const tables = screen
+        .getAllByRole("table")
+        .filter((x) => within(x).queryByRole("row", { name: "Lowscores" }));
+      expect(tables).lengthOf(1);
 
-      const first = within(lowscores!).getByRole("row", { name: "Robert Duvall 100" });
-      const second = within(lowscores!).getByRole("row", { name: "Diane Keaton 200" });
-      const third = within(lowscores!).getByRole("row", { name: "Robert De Niro 250" });
-      const fourth = within(lowscores!).getByRole("row", { name: "James Caan 300" });
-      const fifth = within(lowscores!).getByRole("row", { name: "Al Pacino 400" });
+      const [lowscores] = tables;
+      const first = within(lowscores).getByRole("row", { name: "Robert Duvall 100" });
+      const second = within(lowscores).getByRole("row", { name: "Diane Keaton 200" });
+      const third = within(lowscores).getByRole("row", { name: "Robert De Niro 250" });
+      const fourth = within(lowscores).getByRole("row", { name: "James Caan 300" });
+      const fifth = within(lowscores).getByRole("row", { name: "Al Pacino 400" });
 
       // expect the bottom 5 scores to be in ascending order
       expect(first.compareDocumentPosition(second)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
