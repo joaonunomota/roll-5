@@ -52,6 +52,7 @@ const resetGame = () => {
 <template>
   <div>
     <div v-show="!submitted && (isHighscore || isLowscore)">
+      <p class="has-text-centered">You have scored {{ score }} points.</p>
       <label class="is-hidden" for="name">Name</label>
       <input id="name" v-model="name" type="text" />
       <button class="is-fancy" :disabled="!name" @click="submit">Submit</button>

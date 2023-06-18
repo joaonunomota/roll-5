@@ -5,6 +5,11 @@ import VScores from "../VScores.vue";
 describe("VScores", () => {
   afterEach(() => localStorage.clear());
 
+  it("displays final score", () => {
+    render(VScores, { props: { score: 30 } });
+    screen.getByText("You have scored 30 points.");
+  });
+
   it("displays populated tables", () => {
     const scores = [{ name: "Susan Boyle", score: 200 }];
     localStorage.setItem("highscores", JSON.stringify(scores));
@@ -39,6 +44,41 @@ describe("VScores", () => {
       expect(highscores).not.toBe(null);
       within(highscores!).getByRole("row", { name: "Elvis Costello 300" });
     });
+
+    it("player has a highscore", async () => {
+      const scores = [
+        { name: "Al Pacino", score: 400 },
+        { name: "Diane Keaton", score: 200 },
+        { name: "James Caan", score: 300 },
+        { name: "Marlon Brando", score: 500 },
+        { name: "Robert Duvall", score: 100 }
+      ];
+      localStorage.setItem("highscores", JSON.stringify(scores));
+      localStorage.setItem("lowscores", JSON.stringify(scores));
+
+      render(VScores, { props: { score: 250 } });
+
+      const input = screen.getByLabelText("Name");
+      await fireEvent.input(input, { target: { value: "Robert De Niro" } });
+
+      const submit = screen.getByRole("button", { name: "Submit" });
+      await fireEvent.click(submit);
+
+      const highscores = screen.getByRole("row", { name: "Highscores" }).closest("table");
+      expect(highscores).not.toBe(null);
+
+      const first = within(highscores!).getByRole("row", { name: "Marlon Brando 500" });
+      const second = within(highscores!).getByRole("row", { name: "Al Pacino 400" });
+      const third = within(highscores!).getByRole("row", { name: "James Caan 300" });
+      const fourth = within(highscores!).getByRole("row", { name: "Robert De Niro 250" });
+      const fifth = within(highscores!).getByRole("row", { name: "Diane Keaton 200" });
+
+      // expect the top 5 scores to be in descending order
+      expect(first.compareDocumentPosition(second)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+      expect(second.compareDocumentPosition(third)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+      expect(third.compareDocumentPosition(fourth)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+      expect(fourth.compareDocumentPosition(fifth)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    });
   });
 
   describe("adds score to lowscores when", () => {
@@ -54,6 +94,41 @@ describe("VScores", () => {
       const lowscores = screen.getByRole("row", { name: "Lowscores" }).closest("table");
       expect(lowscores).not.toBe(null);
       within(lowscores!).getByRole("row", { name: "Elvis Costello 300" });
+    });
+
+    it("player has a lowscore", async () => {
+      const scores = [
+        { name: "Al Pacino", score: 400 },
+        { name: "Diane Keaton", score: 200 },
+        { name: "James Caan", score: 300 },
+        { name: "Marlon Brando", score: 500 },
+        { name: "Robert Duvall", score: 100 }
+      ];
+      localStorage.setItem("highscores", JSON.stringify(scores));
+      localStorage.setItem("lowscores", JSON.stringify(scores));
+
+      render(VScores, { props: { score: 250 } });
+
+      const input = screen.getByLabelText("Name");
+      await fireEvent.input(input, { target: { value: "Robert De Niro" } });
+
+      const submit = screen.getByRole("button", { name: "Submit" });
+      await fireEvent.click(submit);
+
+      const lowscores = screen.getByRole("row", { name: "Lowscores" }).closest("table");
+      expect(lowscores).not.toBe(null);
+
+      const first = within(lowscores!).getByRole("row", { name: "Robert Duvall 100" });
+      const second = within(lowscores!).getByRole("row", { name: "Diane Keaton 200" });
+      const third = within(lowscores!).getByRole("row", { name: "Robert De Niro 250" });
+      const fourth = within(lowscores!).getByRole("row", { name: "James Caan 300" });
+      const fifth = within(lowscores!).getByRole("row", { name: "Al Pacino 400" });
+
+      // expect the bottom 5 scores to be in ascending order
+      expect(first.compareDocumentPosition(second)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+      expect(second.compareDocumentPosition(third)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+      expect(third.compareDocumentPosition(fourth)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+      expect(fourth.compareDocumentPosition(fifth)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     });
   });
 });
